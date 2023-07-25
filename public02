@@ -1,0 +1,25 @@
+#!/bin/tcsh -f
+
+# CMSC 216, Spring 2023, Project #9
+# Public test 2 (public02)
+#
+# Runs yargs.x with the -n option and a target program, no target arguments,
+# and some standard input.  This should produce output because the commands
+# will be printed, but not executed.  yargs.x should have an exit status of
+# zero.
+#
+# If you want to debug your code for this test, run gdb yargs.x.  Then
+# (perhaps after setting some breakpoints), in gdb, use the command:
+#
+#   run -n ls < public02+03.inputdata
+#
+# (c) Larry Herman, 2023.  You are allowed to use this code yourself, but
+# not to provide it to anyone else.
+
+./yargs.x -n ls < public02+03.inputdata
+
+if ($status != 0) then
+  # error exit
+  echo "Problem!  yargs.x did not exit with status 0 in the first run."
+  exit 9
+endif

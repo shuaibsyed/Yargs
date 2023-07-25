@@ -1,0 +1,47 @@
+#!/bin/tcsh -f
+
+# CMSC 216, Spring 2023, Project #9
+# Public test 9 (public09)
+#
+# Runs yargs.x with "touch" as its target program, with its standard input
+# coming from a file that is contained in the project tarfile that has
+# several words.  An argument (-c) appears on the command line of your
+# program, to be used as an argument when "touch" is run, to test whether
+# yargs.x is correctly passing its own command-line arguments along to the
+# target program.  The effect is that files with the words as names should
+# NOT be created, because the -c argument to touch causes it to update the
+# timestamps of existing files, but not create any new files.
+#
+# If you want to debug your code for this test, run gdb yargs.x.  Then
+# (perhaps after setting some breakpoints), in gdb, use the command:
+#
+#   run touch -c < public09.inputdata
+#
+# (c) Larry Herman, 2023.  You are allowed to use this code yourself, but
+# not to provide it to anyone else.
+
+# Remove these files if they already exist.  Note that "-e" tests whether a
+# file exists in tcsh.
+if ((-e parrots) || (-e eat) || (-e carrots)) then
+  rm -f parrots eat carrots
+endif
+
+./yargs.x touch -c < public09.inputdata
+
+if ($status != 0) then
+  # error exit
+  echo "Problem!  yargs.x did not exit with status 0."
+  exit 9
+endif
+
+if ((-e parrots) || (-e eat) || (-e carrots)) then
+  # error exit
+  echo "Problem!  Something didn't work right; none of the files parrots,"
+  echo "eat, or carrots should have been created."
+  exit 9
+else
+  # normal exit
+  echo "Success!  None of the files parrots, eat, or carrots were created, as"
+  echo "expected."
+  exit 0
+endif

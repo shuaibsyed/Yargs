@@ -1,0 +1,46 @@
+#!/bin/tcsh -f
+
+# CMSC 216, Spring 2023, Project #9
+# Public test 13 (public13)
+#
+# Runs yargs.x to test that when an invocation of the target program had a
+# nonzero exit status no further runs of the target program are performed.
+#
+# If you want to debug your code for this test, run gdb yargs.x.  Then
+# (perhaps after setting some breakpoints), in gdb, use the command:
+#
+#   run rm < public13.inputdata
+#
+# (c) Larry Herman, 2023.  You are allowed to use this code yourself, but
+# not to provide it to anyone else.
+
+# Remove these files if they already exist (because this test could be run
+# more than once, and the program might have a bug and not remove them).
+# Note that "-e" tests whether a file exists in tcsh.
+if ((-e public13.file1) || (-e public13.file2) || (-e public13.file3) || \
+    (-e public13.file4)) then
+  rm -f public13.file?
+endif
+
+# now create files with three of these names
+touch public13.file1 public13.file2 public13.file4
+
+# Note we are not even examining the output that is produced (">& /dev/null
+# throws it away); in this test we are only concerned with the exit status
+# of yargs.x.  Note that the exit status of rm is 1 if some files given on
+# its command line didn't exist or couldn't be removed, which is the case
+# here.
+./yargs.x rm < public13.inputdata >& /dev/null
+
+# yargs.x should have returned 1, and NOT removed public13.file4
+if ($status == 1 && (-e public13.file4)) then
+  # normal exit
+  echo "Success!  yargs.x exited with status 1 and public13.file4 is still"
+  echo "present."
+  exit 0
+else
+  # error exit
+  echo "Problem!  yargs.x did not exit with status 1, or public13.file4 was"
+  echo "incorrectly removed."
+  exit 9
+endif

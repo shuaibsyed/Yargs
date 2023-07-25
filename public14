@@ -1,0 +1,39 @@
+#!/bin/tcsh -f
+
+# CMSC 216, Spring 2023, Project #9
+# Public test 14 (public14)
+#
+# Runs yargs.x with a nonexistent target program name; it should exit with
+# status 255 in this case because a child process could not be created to
+# run the target program.
+#
+# If you want to debug your code for this test, first run
+#
+#   \ls split.h safe-fork.h > out
+#
+# Then run gdb yargs.x.  Then (perhaps after setting some breakpoints), in
+# gdb, use the command:
+#
+#   run nonexistent-command < out
+#
+# (You can use a different name instead of "out", but if you use the name
+# "out" and a file named "out" already exists you may have to remove it
+# first.)
+#
+# (c) Larry Herman, 2023.  You are allowed to use this code yourself, but
+# not to provide it to anyone else.
+
+ls split.h safe-fork.h | ./yargs.x nonexistent-command
+
+# yargs.x should have returned 1
+if ($status == 255) then
+  # normal exit
+  echo "Success!  yargs.x exited with status 255 when the target program did"
+  echo "not exist, so it could not be run."
+  exit 0
+else
+  # error exit
+  echo "Problem!  yargs.x did not exit with status 255 even though the target"
+  echo "program did not exist and could not be run."
+  exit 9
+endif

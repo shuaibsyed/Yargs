@@ -1,0 +1,38 @@
+#!/bin/tcsh -f
+
+# CMSC 216, Spring 2023, Project #9
+# Public test 12 (public12)
+#
+# Runs yargs.x to test its exit status for an incorrect invocation of the
+# target program (it should exit with whatever exit status the target
+# program had when any invocation of the target program had a nonzero exit
+# status; here the fourth invocation should have a nonzero exit status, in
+# particular of 2, because that target program ls exits with status 2 when
+# asked to list any nonexistent files).
+#
+# If you want to debug your code for this test, run gdb yargs.x.  Then
+# (perhaps after setting some breakpoints), in gdb, use the command:
+#
+#   run ls < public12+16.inputdata
+#
+# (c) Larry Herman, 2023.  You are allowed to use this code yourself, but
+# not to provide it to anyone else.
+
+# Note we are not even examining the output that is produced (">& /dev/null
+# throws it away); in this test we are only concerned with the exit status
+# of yargs.x.  Note that the exit status of ls is 2 if some files given on
+# its command line didn't exist or couldn't be listed, which is the case
+# here.
+./yargs.x ls < public12+16.inputdata >& /dev/null
+
+if ($status == 2) then
+  # normal exit
+  echo "Success!  yargs.x exited with status 2 when the target program"
+  echo "exited with status 2."
+  exit 0
+else
+  # error exit
+  echo "Problem!  yargs.x did not exit with status 2 even though the target"
+  echo "program exited with nonzero status (of 2)."
+  exit 9
+endif

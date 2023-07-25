@@ -1,0 +1,68 @@
+#!/bin/tcsh -f
+
+# CMSC 216, Spring 2023, Project #9
+# Public test 1 (public01)
+#
+# Runs yargs.x in three ways that should not cause any output to be
+# produced:
+#
+#   - The first time it is run with the -n option but no target program
+#     (therefore no target arguments either), and no standard input
+#
+#   - The second time it is run with the -n option and a target program,
+#     but no target arguments and no standard input
+#
+#   - The third time it is run with the -n option and a target program, and
+#     some target arguments, but no standard input
+#
+# In all three cases yargs.x should have an exit status of zero.
+#
+# If you want to debug your code for the first execution below, run
+# gdb yargs.x.  Then (perhaps after setting some breakpoints), in gdb, use
+# the command:
+#
+#   run -n < public01+04.inputdata
+#
+# If you want to debug your code for the second execution below, run
+# gdb yargs.x.  Then (perhaps after setting some breakpoints), in gdb, use
+# the command:
+#
+#   run -n make < public01+04.inputdata
+#
+# If you want to debug your code for the first execution below, run
+# gdb yargs.x.  Then (perhaps after setting some breakpoints), in gdb, use
+# the command:
+#
+#   run -n make -f nonexistent-makefile < public01+04.inputdata
+#
+# (c) Larry Herman, 2023.  You are allowed to use this code yourself, but
+# not to provide it to anyone else.
+
+# all three runs use an empty input file 
+
+echo "The first run:"
+./yargs.x -n < public01+04.inputdata
+if ($status != 0) then
+  # error exit
+  echo "Problem!  yargs.x did not exit with status 0 in the first run."
+  exit 1
+endif
+
+echo "The second run:"
+# "make" is the target program name
+./yargs.x -n make < public01+04.inputdata
+if ($status != 0) then
+  # error exit
+  echo "Problem!  yargs.x did not exit with status 0 in the second run."
+  exit 1
+endif
+
+echo "The third run:"
+# "make" is the target program name and "-f" and "nonexistent-makefile" are
+# the two target arguments
+./yargs.x -n make -f nonexistent-makefile < public01+04.inputdata
+if ($status != 0) then
+  # error exit
+  echo "Problem!  yargs.x did not exit with status 0 in the third run."
+  exit 9
+endif

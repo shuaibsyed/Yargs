@@ -1,0 +1,34 @@
+#!/bin/tcsh -f
+
+# CMSC 216, Spring 2023, Project #9
+# Public test 7 (public07)
+#
+# Runs yargs.x with /bin/echo as the target program, with its standard input
+# coming from the output of the "ls" command.  "ls" is being used to list
+# (i.e., print to its standard output) the contents of a directory that
+# contains several files (the directory is in the project tarfile).  The
+# names of the files in the directory will be echoed one per output line.
+#
+# If you want to debug your code for this test, first run
+#
+#   \ls public07.directory > out
+#
+# Then run gdb yargs.x.  Then (perhaps after setting some breakpoints), in
+# gdb, use the command:
+#
+#   run /bin/echo < out
+#
+# (You can use a different name instead of "out", but if you use the name
+# "out" and a file named "out" already exists you may have to remove it
+# first.)
+#
+# (c) Larry Herman, 2023.  You are allowed to use this code yourself, but
+# not to provide it to anyone else.
+
+ls public07.directory | ./yargs.x /bin/echo
+
+if ($status != 0) then
+  # error exit
+  echo "Problem!  yargs.x did not exit with status 0."
+  exit 9
+endif

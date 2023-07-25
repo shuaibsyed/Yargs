@@ -1,0 +1,36 @@
+#!/bin/tcsh -f
+
+# CMSC 216, Spring 2023, Project #9
+# Public test 10 (public10)
+#
+# Runs yargs.x with /bin/echo as the target program, with several lines of
+# data in its standard input, and checks for memory leaks.
+#
+# This test runs valgrind in such a way that its output is suppressed,
+# because even if your program is correct, valgrind's output would throw
+# things off on the submit server.  But if you are failing this test and
+# want to see valgrind's output and messages, run this modified version of
+# the command used below:
+#
+# valgrind --leak-check=full --trace-children=yes yargs.x /bin/echo < public10.inputdata
+#
+# (c) Larry Herman, 2023.  You are allowed to use this code yourself, but
+# not to provide it to anyone else.
+
+# This command runs valgrind silently, throws away any output it produces,
+# and causes it to exit with exit code 0 only if yargs.x doesn't have any
+# memory problems.  Note we are not even examining the output that is
+# produced; in this test we are only concerned with memory problems.
+valgrind -q --leak-check=full --trace-children=yes --error-exitcode=100 \
+  ./yargs.x /bin/echo < public10.inputdata >& /dev/null
+
+if ($status == 0) then
+  # normal exit
+  echo "Success!  yargs.x didn't have any memory problems."
+  exit 0
+else
+  # error exit
+  echo "Problem!  yargs.x had memory leaks or other memory problems."
+  echo "or did not exit with status 0."
+  exit 9
+endif

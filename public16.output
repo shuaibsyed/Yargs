@@ -1,0 +1,3 @@
+Success!  yargs.x didn't have any memory problems and exited with the
+expected exit status of 2, because an invocation of the target
+program exited with status 2.
